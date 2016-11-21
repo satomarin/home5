@@ -269,6 +269,7 @@ public class UserDao {
 
 
 
+	//重複
 	public User overlap(Connection connection, String account) {
 
 		PreparedStatement ps = null;

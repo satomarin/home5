@@ -24,17 +24,9 @@ public class NewMessageServlet extends HttpServlet {
 	@Override
 	protected void doGet (HttpServletRequest request, HttpServletResponse response) throws IOException,ServletException {
 
-		User user = (User) request.getSession().getAttribute("loginUser");
+		Message message = new Message();
+		request.setAttribute("message", message);
 
-		boolean isShowMessageForm;
-		if (user != null) {
-			isShowMessageForm = true;
-		} else {
-			isShowMessageForm = false;
-		}
-
-
-		request.setAttribute("isShowMessageForm", isShowMessageForm);
 		request.getRequestDispatcher("/message.jsp").forward(request, response);
 	}
 
@@ -48,31 +40,26 @@ public class NewMessageServlet extends HttpServlet {
 
 		List<String> messages = new ArrayList<String>();
 
-		String title = request.getParameter("title");
-		String category = request.getParameter("category");
-		String newmessage = request.getParameter("message");
+		User user = (User) session.getAttribute("loginUser");
+
+		Message message = new Message();
+
+		message.setUserId(user.getId());
+		message.setTitle(request.getParameter("title"));
+		message.setCategory(request.getParameter("category"));
+		message.setText(request.getParameter("text"));
 
 		if (isValid(request, messages) == true) {
-
-			User user = (User) session.getAttribute("loginUser");
-
-			Message message = new Message();
-
-			message.setUserId(user.getId());
-			message.setText(request.getParameter("message"));
-			message.setTitle(request.getParameter("title"));
-			message.setCategory(request.getParameter("category"));
 
 			new MessageService().register(message);
 
 			response.sendRedirect("./");
+
 		} else {
 			session.setAttribute("errorMessages", messages);
-			response.sendRedirect("newMessage");
 
-			session.setAttribute("category", category);
-			session.setAttribute("title", title);
-			session.setAttribute("message", newmessage);
+			request.setAttribute("message", message);
+			request.getRequestDispatcher("/message.jsp").forward(request, response);
 		}
 	}
 
@@ -80,27 +67,27 @@ public class NewMessageServlet extends HttpServlet {
 
 		String title = request.getParameter("title");
 		String category = request.getParameter("category");
-		String message = request.getParameter("message");
+		String text = request.getParameter("text");
 
 
-		if (StringUtils.isEmpty(title) == true) {
-			messages.add("タイトルを入力してください");
+		if (StringUtils.isEmpty(title) == true || StringUtils.isBlank(title) == true) {
+			messages.add("件名を入力してください");
 		}
-		if (StringUtils.isEmpty(category) == true){
+		if (StringUtils.isEmpty(category) == true || StringUtils.isBlank(category) == true){
 			messages.add("カテゴリーを入力してください");
 		}
-		if (StringUtils.isEmpty(message)){
-			messages.add("メッセージを入力してください");
+		if (StringUtils.isEmpty(text) == true || StringUtils.isBlank(text) == true){
+			messages.add("本文を入力してください");
 		}
 
 
 		if (50 < title.length()){
-			messages.add("タイトルは50文字以下で入力してください");
+			messages.add("件名は50文字以下で入力してください");
 		}
 		if (10 < category.length()){
 			messages.add("カテゴリーは10文字以下で入力してください");
 		}
-		if (1000 < message.length()){
+		if (1000 < text.length()){
 			messages.add("本文は1000文字以下で入力してください");
 		}
 

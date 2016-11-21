@@ -11,6 +11,7 @@
 </head>
 <body>
 
+<h2>ユーザー情報編集画面</h2>
 
 <div class="main-contents">
 <c:if test="${ not empty errorMessages }">
@@ -29,13 +30,13 @@
 
 	<input type="hidden" name="id" value="${editUser.id}"></input>
 
-	<label for="account">ログインID</label>
-	<input name="account" id="account"value="${editUser.account}"/>（あなたの公開プロフィール: http://localhost:8080/Chapter6/?account=アカウント名）<br />
+	<label for="account">ログインID（半角英数字6文字以上20文字以下）</label>
+	<input name="account" id="account"value="${editUser.account}"/><br />
 
-	<label for="name">名前</label>
-	<input name="name" id="name" value="${editUser.name}"/>（名前はあなたの公開プロフィールに表示されます）<br />
+	<label for="name">名前（10文字以下）</label>
+	<input name="name" id="name" value="${editUser.name}"/><br />
 
-	<label for="password">パスワード</label>
+	<label for="password">パスワード（記号を含む全ての半角文字6文字以上255文字以下）</label>
 	<input name="password" type="password" id="password"/> <br />
 
 	<label for="confirmationPassword">パスワード 確認用</label>
@@ -68,6 +69,7 @@
 	<br />
 
 	<input type="submit" value="登録" /> <br />
+	<br /><br />
 	<a href="setting">戻る</a>
 
 </form>

@@ -36,6 +36,10 @@ public class SignUpServlet extends HttpServlet {
 		request.setAttribute("branches", branches);
 		request.setAttribute("departments", departments);
 
+
+		User user = new User();
+		request.setAttribute("user", user);
+
 		//jspファイルをgetする
 		request.getRequestDispatcher("signup.jsp").forward(request, response);
 	}
@@ -43,25 +47,19 @@ public class SignUpServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request,HttpServletResponse response) throws IOException, ServletException {
 
-		String id = request.getParameter("id");
-		String account = request.getParameter("account");
-		String name = request.getParameter("name");
-		String branchId = request.getParameter("branch_id");
-		String departmentId = request.getParameter("department_id");
-
-
 		List<String> messages = new ArrayList<String>();
 		HttpSession session = request.getSession();
 
-		if (isValid(request, messages) == true) {
+		User user = new User();
+		user.setAccount(request.getParameter("account"));
+		user.setName(request.getParameter("name"));
+		user.setPassword(request.getParameter("password"));
+		user.setBranchID(request.getParameter("branch_id"));
+		user.setDepartmentID(request.getParameter("department_id"));
+		user.setStopped(false);
 
-			User user = new User();
-			user.setAccount(request.getParameter("account"));
-			user.setName(request.getParameter("name"));
-			user.setPassword(request.getParameter("password"));
-			user.setBranchID(request.getParameter("branch_id"));
-			user.setDepartmentID(request.getParameter("department_id"));
-			user.setStopped(false);
+
+		if (isValid(request, messages) == true) {
 
 			new UserService().register(user);
 
@@ -69,13 +67,18 @@ public class SignUpServlet extends HttpServlet {
 
 		} else {
 			session.setAttribute("errorMessages", messages);
-			response.sendRedirect("signup");
 
-			session.setAttribute("id", id);
-			session.setAttribute("account", account);
-			session.setAttribute("name", name);
-			session.setAttribute("branch_id", branchId);
-			session.setAttribute("department_id", departmentId);
+			request.setAttribute("user", user);
+
+			//取得
+			List<Branch> branches = new BranchService().getBranch();
+			List<Department> departments = new DepartmentService().getDepartment();
+			//jspで使えるように
+			request.setAttribute("branches", branches);
+			request.setAttribute("departments", departments);
+
+
+			request.getRequestDispatcher("signup.jsp").forward(request, response);
 		}
 	}
 
@@ -84,6 +87,8 @@ public class SignUpServlet extends HttpServlet {
 		String account = request.getParameter("account");
 		String name = request.getParameter("name");
 		String password = request.getParameter("password");
+		String branchId = request.getParameter("branch_id");
+		String departmentId = request.getParameter("department_id");
 		String confirmationPassword = request.getParameter("confirmationPassword");
 
 		//取得
@@ -98,7 +103,7 @@ public class SignUpServlet extends HttpServlet {
 			messages.add("アカウントが重複しています");
 		}
 
-		if (StringUtils.isEmpty(name) == true) {
+		if (StringUtils.isEmpty(name) == true || StringUtils.isBlank(name) == true) {
 			messages.add("名前を入力してください");
 		}
 		if (StringUtils.isEmpty(password) == true) {
@@ -109,6 +114,14 @@ public class SignUpServlet extends HttpServlet {
 		}
 		if (!password.equals(confirmationPassword)){
 			messages.add("確認用パスワードが間違っています");
+		}
+
+		if (StringUtils.isEmpty(branchId) == true ){
+			messages.add("支店を選択してください");
+		}
+
+		if (StringUtils.isEmpty(departmentId) == true){
+			messages.add("部署・役職を選択してください");
 		}
 
 		if (!account.matches("^[a-zA-Z0-9]{6,20}$") && (StringUtils.isEmpty(account) == false)){

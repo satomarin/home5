@@ -9,7 +9,7 @@
 	<title>ユーザー管理画面</title>
 	<link href="./css/style.css" rel="stylesheet" type="text/css">
 
-	<script type="text/javascript">
+<script type="text/javascript">
 
 
 <!--
@@ -37,10 +37,27 @@ function check(){
 </head>
 <body>
 
+<h2>ユーザー管理画面</h2>
+
+<div class="main-contents">
+<c:if test="${ not empty errorMessages }">
+	<div class="errorMessages">
+		<ul>
+			<c:forEach items="${errorMessages}" var="message">
+				<li><c:out value="${message}" />
+			</c:forEach>
+		</ul>
+	</div>
+	<c:remove var="errorMessages" scope="session"/>
+</c:if>
+
 <div class="header">
 	<a href="signup">登録する</a>
 </div>
 
+
+<br />
+<br />
 <div class="main-contents">
 
 
@@ -82,12 +99,12 @@ function check(){
 					<form action="setting" method="post" onSubmit="return check()">
 						<input type="hidden" name="id" value="${user.id}"></input>
 						<c:if test ="${user.stopped == true}">
-							<input type="submit"  value="稼動させる" />停止中
+							<input type="submit"  value="稼動" />停止中
 							<input type="hidden" name="stopped" id="stopped" value="false"></input>
 
 						</c:if>
 						<c:if test = "${user.stopped == false}">
-							<input type="submit"  value="停止させる" />稼動中
+							<input type="submit"  value="停止" />稼動中
 							<input type="hidden" name="stopped" id="stopped" value="true"></input>
 						</c:if>
 					</form>
@@ -102,9 +119,12 @@ function check(){
 	</div>
 </div>
 
+<br />
+<br />
 <a href="./">戻る</a>
 
 <div class="copyright">Copyright(c)Sato Marin</div>
+</div>
 </div>
 </body>
 </html>

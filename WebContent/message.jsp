@@ -12,6 +12,8 @@
 </head>
 <body>
 
+<h2>新規投稿画面</h2>
+
 <div class="main-contents">
 <c:if test="${ not empty errorMessages }">
 	<div class="errorMessages">
@@ -25,25 +27,25 @@
 </c:if>
 
 <div class="form-area">
-	<c:if test="${ isShowMessageForm }">
-		<form action="newMessage" method="post"><br />
-			<pre>件名(50文字以内)</pre>
-			<textarea name="title" cols="100" rows="5" class="tweet-box"  >${ title }</textarea>
-			<br />
+	<form action="newMessage" method="post"><br />
 
-			<pre>カテゴリー(10文字以内)</pre>
-			<textarea name="category" cols="100" rows="5" class="tweet-box">${ category }</textarea>
-			<br />
+		<label for="title">件名(50文字以内)</label>
+		<input name="title" id="title" value="${ message.title }"/>
+		<br />
 
-			<pre>本文(1000文字以内)</pre>
-			<textarea name="message" cols="100" rows="5" class="tweet-box">${ message }</textarea>
-			<br />
-			<input type="submit" value="投稿"">
-		</form>
-	</c:if>
+		<label for="category">カテゴリー(10文字以内)</label>
+		<input name="category" id="category" value="${ message.category }"/>
+		<br />
+
+		<label for="text">本文(1000文字以内)</label>
+		<textarea name="text" cols="100" rows="5" class="tweet-box" >${ message.text }</textarea>
+		<br />
+
+		<input type="submit" value="投稿"">
+	</form>
 </div>
 </div>
-
+<br /><br />
 <a href="./">戻る</a>
 </body>
 </html>

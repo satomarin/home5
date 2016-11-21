@@ -37,17 +37,35 @@ public class EditingServlet extends HttpServlet {
 		request.setAttribute("branches", branches);
 		request.setAttribute("departments", departments);
 
-		HttpSession session = request.getSession();
-
 
 		//ユーザー情報編集にてどこの編集が押されたのか、ユーザーIDをもらっている
 		String editId =request.getParameter("id");
 
+
+		//editID画数字かどうか、nullかどうか
+		List<String> messages = new ArrayList<String>();
+		HttpSession session = request.getSession();
+		if( editId == null || (!editId.matches("[0-9]+$")) ){
+			messages.add("無効なURLが入力されました");
+			session.setAttribute("errorMessages", messages);
+			response.sendRedirect("setting");
+
+			return;
+		}
 		UserService userService = new UserService();
 		User editUser = userService.editing(editId);
 
+		//editUserが空かnullじゃなかったらok
+		if(editUser == null){
+			messages.add("無効なURLが入力されました");
+			session.setAttribute("errorMessages", messages);
+			response.sendRedirect("setting");
+
+			return;
+		}
+
+
 		request.setAttribute("editUser", editUser);
-		session.setAttribute("editUser", editUser);
 
 		//jspファイルをgetする
 		request.getRequestDispatcher("editing.jsp").forward(request, response);
@@ -60,24 +78,41 @@ public class EditingServlet extends HttpServlet {
 
 		List<String> messages = new ArrayList<String>();
 		HttpSession session = request.getSession();
-        User editUser = (User) session.getAttribute("editUser");
+
+
+        User user = new User();
+		user.setId(Integer.parseInt(request.getParameter("id")));
+		user.setAccount(request.getParameter("account"));
+		user.setName(request.getParameter("name"));
+		user.setPassword(request.getParameter("password"));
+		user.setBranchID(request.getParameter("branch_id"));
+		user.setDepartmentID(request.getParameter("department_id"));
+
+
 
 		if (isValid(request, messages) == true) {
 
-			User user = new User();
-			user.setId(Integer.parseInt(request.getParameter("id")));
-			user.setAccount(request.getParameter("account"));
-			user.setName(request.getParameter("name"));
-			user.setPassword(request.getParameter("password"));
-			user.setBranchID(request.getParameter("branch_id"));
-			user.setDepartmentID(request.getParameter("department_id"));
 			new UserService().update(user);
 
-
 			response.sendRedirect("setting");
+
 		} else {
+
 			session.setAttribute("errorMessages", messages);
-			response.sendRedirect("editing?id="+ editUser.getId());
+
+
+			request.setAttribute("editUser", user);
+
+			//取得
+			List<Branch> branches = new BranchService().getBranch();
+			List<Department> departments = new DepartmentService().getDepartment();
+
+			//jspで使えるように
+			request.setAttribute("branches", branches);
+			request.setAttribute("departments", departments);
+
+			//jspファイルをgetする
+			request.getRequestDispatcher("editing.jsp").forward(request, response);
 		}
 	}
 
@@ -90,16 +125,17 @@ public class EditingServlet extends HttpServlet {
 		String password = request.getParameter("password");
 		String confirmationPassword = request.getParameter("confirmationPassword");
 
+		System.out.println(name);
+
 
 		//取得
 		User users = new UserService().overlap(account);
 
 
-
 		if (StringUtils.isEmpty(account) == true) {
 			messages.add("ログインIDを入力してください");
 		}
-		if (StringUtils.isEmpty(name) == true) {
+		if (StringUtils.isEmpty(name) == true || StringUtils.isBlank(name) == true) {
 			messages.add("名前を入力してください");
 		}
 

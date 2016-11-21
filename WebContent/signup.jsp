@@ -10,6 +10,9 @@
 	<link href="./css/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+
+<h2>ユーザー新規登録画面</h2>
+
 <div class="main-contents">
 <c:if test="${ not empty errorMessages }">
 	<div class="errorMessages">
@@ -24,13 +27,13 @@
 <form action="signup" method="post"><br />
 
 
-	<label for="account">ログインID</label>
-	<input name="account" id="account"value="${account}"/>（あなたの公開プロフィール: http://localhost:8080/Chapter6/?account=アカウント名）<br />
+	<label for="account">ログインID（半角英数字6文字以上20文字以下）</label>
+	<input name="account" id="account"value="${user.account}"/><br />
 
-	<label for="name">名前</label>
-	<input name="name" id="name" value="${name}"/>（名前はあなたの公開プロフィールに表示されます）<br />
+	<label for="name">名前（10文字以下）</label>
+	<input name="name" id="name" value="${user.name}"/><br />
 
-	<label for="password">パスワード</label>
+	<label for="password">パスワード（記号を含む全ての半角文字6文字以上255文字以下）</label>
 	<input name="password" type="password" id="password"/> <br />
 
 	<label for="confirmationPassword">パスワード 確認用</label>
@@ -38,21 +41,33 @@
 
 	<label for="branch_id">支店</label>
 	<select name="branch_id" size="1">
+	<option value="">選択してください</option>
 		<c:forEach items="${ branches }" var="branch">
-			<option value="${ branch.id }" >${ branch.name }</option>
+			<c:if test ="${branch.id == user.branchID}">
+				<option value="${ branch.id }" selected>${ branch.name }</option>
+			</c:if>
+			<c:if test ="${branch.id != user.branchID}">
+				<option value="${ branch.id }" >${ branch.name }</option>
+			</c:if>
 		</c:forEach>
 	</select>
 	<br />
 	<label for="department_id">部署・役職</label>
 	<select name="department_id" size="1">
+	<option value="">選択してください</option>
 		<c:forEach items="${ departments }" var="department">
-			<option value="${ department.id }" >${ department.name }</option>
+			<c:if test ="${department.id == user.departmentID}">
+				<option value="${ department.id }" selected>${ department.name }</option>
+			</c:if>
+			<c:if test ="${department.id != user.departmentID}">
+				<option value="${ department.id }" >${ department.name }</option>
+			</c:if>
 		</c:forEach>
 	</select>
 	<br />
 
 	<input type="submit" value="登録" /> <br />
-	<a href="./">戻る</a>
+	<a href="setting">戻る</a>
 
 </form>
 <div class="copyright">Copyright(c)Marin Sato</div>

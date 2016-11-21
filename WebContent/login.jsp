@@ -10,6 +10,8 @@
 	<link href="./css/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+
+<h2>ログイン画面</h2>
 <div class="main-contents">
 
 <c:if test="${ not empty errorMessages }">
@@ -32,7 +34,6 @@
 	<input name="password" type="password" id="password"/> <br />
 
 	<input type="submit" value="ログイン" /> <br />
-	<a href="./">戻る</a>
 	<c:remove var="account" scope="session"/>
 </form>
 <div class="copyright">Copyright(c)Sato Marin</div>

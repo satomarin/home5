@@ -35,16 +35,13 @@ public class UserMessageDao {
 
 			ps = connection.prepareStatement(sql.toString());
 
+			ps.setString(1, firstTime + " 00:00:00");
+			ps.setString(2, lastTime + " 23:59:59");
+
 			if(!StringUtils.isEmpty(category)){
-				ps.setString(1, firstTime);
-				ps.setString(2, lastTime);
 				ps.setString(3, category);
-			}else{
-				ps.setString(1, firstTime);
-				ps.setString(2, lastTime);
 			}
 
-			System.out.println(ps);
 
 			ResultSet rs = ps.executeQuery();
 			List<UserMessage> ret = toUserMessageList(rs);
