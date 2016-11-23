@@ -82,13 +82,13 @@ public class NewMessageServlet extends HttpServlet {
 
 
 		if (50 < title.length()){
-			messages.add("件名は50文字以下で入力してください");
+			messages.add("件名は50文字以内で入力してください");
 		}
 		if (10 < category.length()){
-			messages.add("カテゴリーは10文字以下で入力してください");
+			messages.add("カテゴリーは10文字以内で入力してください");
 		}
 		if (1000 < text.length()){
-			messages.add("本文は1000文字以下で入力してください");
+			messages.add("本文は1000文字以内で入力してください");
 		}
 
 		if (messages.size() == 0) {

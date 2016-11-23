@@ -14,10 +14,27 @@
 
 <!--
 
-function check(){
+function stopcheck(){
 
 	//「OK」の処理開始 ＋ 確認ダイアログの表示
-	if(window.confirm('よろしいですか？')){
+	if(window.confirm('アカウント停止してもよろしいですか？')){
+		location.href = "example_confirm.html"; // example_confirm.html へジャンプ
+		return true; // 「OK」時は送信を実行
+	}
+	// 「OK」時の処理終了
+
+	// 「キャンセル」時の処理開始
+	else{
+		window.alert('キャンセルされました'); // 警告ダイアログを表示
+		return false; // 送信を中止
+	}
+	// 「キャンセル」時の処理終了
+}
+
+function startcheck(){
+
+	//「OK」の処理開始 ＋ 確認ダイアログの表示
+	if(window.confirm('アカウント稼働してもよろしいですか？')){
 		location.href = "example_confirm.html"; // example_confirm.html へジャンプ
 		return true; // 「OK」時は送信を実行
 	}
@@ -39,6 +56,15 @@ function check(){
 
 <h2>ユーザー管理画面</h2>
 
+
+<div class="header">
+	<a href="signup">ユーザー登録</a>
+	<a href="./">ホーム画面</a>
+	<div class="out"><a href="logout">ログアウト</a></div>
+</div>
+
+
+
 <div class="main-contents">
 <c:if test="${ not empty errorMessages }">
 	<div class="errorMessages">
@@ -51,10 +77,6 @@ function check(){
 	<c:remove var="errorMessages" scope="session"/>
 </c:if>
 
-<div class="header">
-	<a href="signup">登録する</a>
-</div>
-
 
 <br />
 <br />
@@ -66,14 +88,13 @@ function check(){
 <div class="users">
 	<div class="user">
 		<table border="1">
-
 			<tr>
-				<td>ユーザー名</td>
-				<td>ログインID</td>
-				<td>支店</td>
-				<td>部署・役職</td>
-				<td>アカウント停止</td>
-				<td>編集</td>
+				<td><b>ユーザー名</b></td>
+				<td><b>ログインID</b></td>
+				<td><b>支店</b></td>
+				<td><b>部署・役職</b></td>
+				<td><b>アカウント</b></td>
+				<td><b>編集</b></td>
 			</tr>
 
 			<c:forEach items="${users}" var="user">
@@ -96,18 +117,21 @@ function check(){
 
 					<td>
 					<c:if test="${ loginUser.id != user.id }">
-					<form action="setting" method="post" onSubmit="return check()">
-						<input type="hidden" name="id" value="${user.id}"></input>
-						<c:if test ="${user.stopped == true}">
-							<input type="submit"  value="稼動" />停止中
-							<input type="hidden" name="stopped" id="stopped" value="false"></input>
+						<form action="setting" method="post" onSubmit="return startcheck()">
+							<input type="hidden" name="id" value="${user.id}"></input>
+							<c:if test ="${user.stopped == true}">
+								<input type="submit"  value="稼動" /> 停止中
+								<input type="hidden" name="stopped" id="stopped" value="false"></input>
 
-						</c:if>
-						<c:if test = "${user.stopped == false}">
-							<input type="submit"  value="停止" />稼動中
-							<input type="hidden" name="stopped" id="stopped" value="true"></input>
-						</c:if>
-					</form>
+							</c:if>
+						</form>
+						<form action="setting" method="post" onSubmit="return stopcheck()">
+						<input type="hidden" name="id" value="${user.id}"></input>
+							<c:if test = "${user.stopped == false}">
+								<input type="submit"  value="停止" />
+								<input type="hidden" name="stopped" id="stopped" value="true"></input>
+							</c:if>
+						</form>
 					</c:if>
 					</td>
 
@@ -121,9 +145,9 @@ function check(){
 
 <br />
 <br />
-<a href="./">戻る</a>
 
-<div class="copyright">Copyright(c)Sato Marin</div>
+
+<div class ="copyright">Copyright(c)Marin Sato</div>
 </div>
 </div>
 </body>

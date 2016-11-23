@@ -20,7 +20,7 @@
 function check(){
 
 	//「OK」の処理開始 ＋ 確認ダイアログの表示
-	if(window.confirm('よろしいですか？')){
+	if(window.confirm('削除してもよろしいですか？')){
 		location.href = "example_confirm.html"; // example_confirm.html へジャンプ
 		return true; // 「OK」時は送信を実行
 	}
@@ -43,8 +43,26 @@ function check(){
 
 <h2>ホーム画面</h2>
 
+<div class="header">
+	<c:if test="${ empty loginUser }">
+		<a href="login">ログイン</a>
+
+	</c:if>
+	<c:if test="${ not empty loginUser }">
+		<a href="newMessage">新規投稿</a>
+		<c:if test="${ editUsers.departmentID == 1 && editUsers.branchID == 1}">
+			<a href="setting">ユーザー管理</a>
+		</c:if>
+		<div class="out"><a href="logout">ログアウト</a></div>
+	</c:if>
+</div>
+
 
 <div class="main-contents">
+
+<br />
+<br />
+
 <c:if test="${ not empty errorMessages }">
 	<div class="errorMessages">
 		<ul>
@@ -56,23 +74,6 @@ function check(){
 	<c:remove var="errorMessages" scope="session"/>
 </c:if>
 
-<div class="main-contents">
-<div class="header1">
-	<c:if test="${ empty loginUser }">
-		<a href="login">ログイン</a>
-
-	</c:if>
-	<c:if test="${ not empty loginUser }">
-		<a href="newMessage">新規投稿</a>
-		<c:if test="${ editUsers.departmentID == 1 && editUsers.branchID == 1}">
-			<a href="setting">ユーザー管理</a>
-		</c:if>
-
-	</c:if>
-</div>
-<div class="header2">
-	<a href="logout">ログアウト</a>
-</div>
 
 <br />
 
@@ -84,10 +85,10 @@ function check(){
 		<option value="">カテゴリーを選択してください</option>
 		<c:forEach items="${ messageCatalogs }" var="messageCatalog">
 			<c:if test ="${ category ==  messageCatalog.category }">
-				<option value="${ messageCatalog.category }" selected>${ messageCatalog.category }</option>
+				<option value="${ messageCatalog.category }" selected><c:out value="${ messageCatalog.category }"></c:out></option>
 			</c:if>
 			<c:if test ="${ category !=  messageCatalog.category }">
-				<option value="${ messageCatalog.category }" >${ messageCatalog.category }</option>
+				<option value="${ messageCatalog.category }" ><c:out value="${ messageCatalog.category }"></c:out></option>
 			</c:if>
 		</c:forEach>
 	</select>
@@ -97,8 +98,8 @@ function check(){
 	<br />
 
 	<label for="message_id">日付</label>
-	<p><input type="date" name="firstTime" value="${ firstTime }" >～<input type="date" name="lastTime" value="${ lastTime }" ></p>
-
+	<input type="date" name="firstTime" value="${ firstTime }" > ～ <input type="date" name="lastTime" value="${ lastTime }" >
+	<br />
 
 	<br />
 
@@ -106,7 +107,7 @@ function check(){
 	<input type="submit" value="絞り込み" /> <br />
 	<br />
 
-	<div><a href="./">絞り込み解除</a></div>
+	<div><a href="./">クリア</a></div>
 
 
 	<br />
@@ -117,28 +118,24 @@ function check(){
 
 <br>
 
-
-
-
-
-
 <div class="messages">
 	<c:forEach items="${messages}" var="message">
-
+	<div class="messageComment">
 		<div class="message">
 			<div class="account-name">
-				<span class="account">ユーザーID : <c:out value="${message.account}" /></span>
-				<span class="name">ユーザー名 : <c:out value="${message.name}" /></span>
+			<br />
+				<div class="name"><span>ユーザー名 : </span><c:out value="${message.name}" /></div>
 			</div>
-			<div class="title">タイトル : <c:out value="${message.title}" /></div>
-			<div class="category">カテゴリー : <c:out value="${message.category}" /></div>
-			<div class="text">本文 :<br />
+
+			<div class="title"><span>タイトル : </span><c:out value="${message.title}" /></div>
+			<div class="category"><span>カテゴリー : </span><c:out value="${message.category}" /></div>
+			<div class="text"><span>本文 :</span>
 				<c:forEach var="s" items="${fn:split(message.text, '
 				')}">
 					<div><c:out value="${s}"></c:out></div>
 				</c:forEach>
 			</div>
-			<div class="date"><fmt:formatDate value="${message.insertDate}" pattern="yyyy/MM/dd HH:mm:ss" /></div>
+			<div class="date"><span>投稿時間 : </span><fmt:formatDate value="${message.insertDate}" pattern="yyyy/MM/dd HH:mm:ss" /></div>
 			<br />
 
 
@@ -158,19 +155,18 @@ function check(){
 		<div class="comment">
 			<c:forEach items="${comments}" var="comment">
 				<c:if test ="${comment.messageId == message.messageId}">
-					<div class="comment">
+					<div >
 						<div class="account-name">
 						<br />
-							<span class="account">ユーザーID : <c:out value="${comment.account}" /></span>
-							<span class="name"> ユーザー名 : <c:out value="${comment.name}" /></span>
+							<div class="name"><span>ユーザー名 : </span><c:out value="${comment.name}" /></div>
 						</div>
-						<div class="text">コメント : <br />
+						<div class="text"><span>コメント : </span>
 							<c:forEach var="s" items="${fn:split(comment.text, '
 							')}">
 								<div><c:out value="${s}"></c:out></div>
 							</c:forEach>
 						</div>
-						<div class="date"><fmt:formatDate value="${comment.insertDate}" pattern="yyyy/MM/dd HH:mm:ss" /></div>
+						<div class="date"><span>投稿時間 : </span><fmt:formatDate value="${comment.insertDate}" pattern="yyyy/MM/dd HH:mm:ss" /></div>
 						<br />
 
 						<form action="deleteComment" method="post" onSubmit="return check()">
@@ -179,8 +175,6 @@ function check(){
 								<input type="submit" value="このコメントを削除" /> <br />
 							</c:if>
 						</form>
-
-
 					</div>
 				</c:if>
 			</c:forEach>
@@ -188,18 +182,18 @@ function check(){
 		<br />
 
 		<div class="comments">
-
 				<form action="comment" method="post" ><br />
 					<textarea name="text" cols="100" rows="5" class="tweet-box">${comment.text}</textarea>
 					<br />
-					<input type="submit" value="コメントする"">(500文字まで)
+					<input type="submit" value="コメントする"">(500文字以内)
 					<input type="hidden" name="messageId" value="${message.messageId}"></input>
 				</form>
-
 		</div>
 		<br />
 		<br />
+		</div>
 	</c:forEach>
+	<br />
 </div>
 
 </div>

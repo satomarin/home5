@@ -11,7 +11,14 @@
 </head>
 <body>
 
-<h2>ユーザー新規登録画面</h2>
+<h2>ユーザー登録画面</h2>
+
+
+<div class="header">
+	<a href="setting">ユーザー管理画面</a>
+	<div class="out"><a href="logout">ログアウト</a></div>
+</div>
+
 
 <div class="main-contents">
 <c:if test="${ not empty errorMessages }">
@@ -24,16 +31,18 @@
 	</div>
 	<c:remove var="errorMessages" scope="session"/>
 </c:if>
-<form action="signup" method="post"><br />
+
+<div class="signup">
+<form action="signup" method="post"><br /><br />
 
 
-	<label for="account">ログインID（半角英数字6文字以上20文字以下）</label>
+	<label for="account">ログインID（半角英数字6文字以上20文字以内）</label>
 	<input name="account" id="account"value="${user.account}"/><br />
 
-	<label for="name">名前（10文字以下）</label>
+	<label for="name">名前（10文字以内）</label>
 	<input name="name" id="name" value="${user.name}"/><br />
 
-	<label for="password">パスワード（記号を含む全ての半角文字6文字以上255文字以下）</label>
+	<label for="password">パスワード（記号を含む全ての半角文字6文字以上255文字以内）</label>
 	<input name="password" type="password" id="password"/> <br />
 
 	<label for="confirmationPassword">パスワード 確認用</label>
@@ -65,12 +74,14 @@
 		</c:forEach>
 	</select>
 	<br />
+	<br /><br />
 
 	<input type="submit" value="登録" /> <br />
-	<a href="setting">戻る</a>
+
 
 </form>
-<div class="copyright">Copyright(c)Marin Sato</div>
+</div>
+<div class ="copyright">Copyright(c)Marin Sato</div>
 </div>
 </body>
 </html>

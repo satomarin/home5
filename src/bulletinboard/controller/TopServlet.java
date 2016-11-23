@@ -56,6 +56,14 @@ public class TopServlet extends HttpServlet {
 			request.setAttribute("lastTime", lastTime);
 		}
 
+		//何もデータがない時
+		if(StringUtils.isEmpty(firstTime) && StringUtils.isEmpty(lastTime)){
+			firstTime = "0000-00-00";
+			lastTime = "0000-00-00";
+			request.setAttribute("firstTime", firstTime);
+			request.setAttribute("lastTime", lastTime);
+		}
+
 
 		//ユーザー
 		List<User> users = new UserService().getUser();
@@ -82,6 +90,8 @@ public class TopServlet extends HttpServlet {
 
 		request.getRequestDispatcher("/top.jsp").forward(request, response);
 
+
 	}
+
 
 }

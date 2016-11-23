@@ -14,6 +14,14 @@
 
 <h2>新規投稿画面</h2>
 
+
+<div class="header">
+	<a href="./">ホーム画面</a>
+	<div class="out"><a href="logout">ログアウト</a></div>
+	<br /><br />
+</div>
+
+
 <div class="main-contents">
 <c:if test="${ not empty errorMessages }">
 	<div class="errorMessages">
@@ -46,6 +54,6 @@
 </div>
 </div>
 <br /><br />
-<a href="./">戻る</a>
+<div class ="copyright">Copyright(c)Marin Sato</div>
 </body>
 </html>

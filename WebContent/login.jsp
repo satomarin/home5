@@ -27,16 +27,16 @@
 
 <form action="login" method="post"><br />
 
-	<label for="account">ログインID</label>
-	<input name="account" value="${account}" id="account"/> <br />
+	<label for="account">ログインID</label><br />
+	<input name="account" value="${account}" id="account"/> <br /><br />
 
-	<label for="password">パスワード</label>
+	<label for="password">パスワード</label><br />
 	<input name="password" type="password" id="password"/> <br />
 
 	<input type="submit" value="ログイン" /> <br />
 	<c:remove var="account" scope="session"/>
 </form>
-<div class="copyright">Copyright(c)Sato Marin</div>
+<div class ="copyright">Copyright(c)Marin Sato</div>
 </div>
 </body>
 </html>

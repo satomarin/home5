@@ -125,18 +125,18 @@ public class SignUpServlet extends HttpServlet {
 		}
 
 		if (!account.matches("^[a-zA-Z0-9]{6,20}$") && (StringUtils.isEmpty(account) == false)){
-			messages.add("ログインIDは[a-zA-Z0-9]の6文字以上20文字以下で入力してください");
+			messages.add("ログインIDは[a-zA-Z0-9]の6文字以上20文字以内で入力してください");
 		}
 
 		if (!password.matches("^[a-zA-Z0-9!-/:-@¥\\[-`{-~]+$") && (StringUtils.isEmpty(password) == false)){
 			if (password.length() < 6 && password.length() > 255){
-				messages.add("パスワードは記号を含む半角文字の6文字以上255文字以下で入力してください");
+				messages.add("パスワードは記号を含む半角文字の6文字以上255文字以内で入力してください");
 			}
 			messages.add("パスワードは記号を含む半角文字で入力してください");
 		}
 
 		if (10 < name.length() && (StringUtils.isEmpty(name) == false)){
-			messages.add("名前は10文字以下で入力してください");
+			messages.add("名前は10文字以内で入力してください");
 		}
 		// TODO アカウントが既に利用されていないか、メールアドレスが既に登録されていないかなどの確認も必要
 		if (messages.size() == 0) {

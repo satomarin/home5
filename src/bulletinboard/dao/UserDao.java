@@ -201,6 +201,7 @@ public class UserDao {
 			sql.append(" = ? "); // branch_id
 			sql.append(", department_id");
 			sql.append(" = ? "); // department_id
+
 			sql.append(", update_date");
 			sql.append(" = CURRENT_TIMESTAMP "); // update_date
 
@@ -224,7 +225,6 @@ public class UserDao {
 				ps.setInt(5, user.getId());
 
 			}
-
 			System.out.println(ps);
 			ps.executeUpdate();
 
